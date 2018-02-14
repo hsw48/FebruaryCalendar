@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>February 2018</title>
+	<style type="text/css">
+		table {border-spacing:0px;border-collapse:collapse;}
+		td {border:2px solid black;width:100px;height:100px;padding:0px;padding-right: 2px;padding-top: 1px;vertical-align: top;text-align: right;}
+		p {font-size: 12px;font-style: bold; color: red;text-align: center;}
+		body {font-family: Segoe UI, Arial, sans-serif;}
+	</style>
+	
+	<script>
+		/* Get current date and highlight day on calendar */
+		function getCurrentDateAndReloadData()
+		{
+			console.log("getting date");
+			var today = new Date();
+			var day = today.getDate();
+			var days = 'td'+day;
+			console.log(days);
+			var cell = document.getElementById(days);
+			cell.style.backgroundColor = "lightblue";
+
+			if(window.localStorage.length != 0) // Restore data if there is some
+			{
+				for(var i = 1; i <= 28; i++)
+				{
+					var event = window.localStorage.getItem(i);
+					if(event != null)
+					{
+						var eventParse = JSON.parse(event);
+						document.getElementById(i).textContent = eventParse.title;
+					}
+				}
+			}
+		}
+		/* Event Object declaration */
+		function Event(date,time,title,details)
+		{
+			//this.id = id;
+			this.date = date;
+			this.time = time;
+			this.title = title;
+			this.details = details;
+		}
+
+		/* Create event object 
+		function createEventObject(id,date,time,title,details)
+		{
+			event = new Event(id,date,time,title,details);
+			eventJSON = JSON.stringify(event);
+			console.log(eventJSON);
+		} */
+		/* Creates new event and adds the title to the calendar */
+		function createNewEvent(date,time,title,details)
+		{
+
+			var d = new Date(date);
+			var day = d.getDate();
+			if(day<31)
+			{day+=1;}
+			else{day=1;}
+			var dateId = '' + day;
+			document.getElementById(dateId).textContent = title; // set event title in calendar
+
+			var event = new Event(date,time,title,details); // create event
+			var eventJSON = JSON.stringify(event);
+
+			window.localStorage.setItem(dateId,eventJSON); // save event to local storage
+
+		}
+
+		/* Displays event details when user clicks on event in calendar */
+		function eventDetails(id)
+		{
+			var x = document.getElementById("detailsDiv"); // make details visible
+			x.style.display = "block";
+
+			var event = window.localStorage.getItem(id);
+			var eventParse = JSON.parse(event)
+			console.log(eventParse);
+			var ti = eventParse.title;
+			var d = eventParse.date;
+			var t = eventParse.time;
+			var de = eventParse.details;
+
+			document.getElementById("deleteId").textContent = id;
+			document.getElementById("eventTitle").textContent = ti;
+			document.getElementById("eventDateTime").textContent = d + " at " + t;
+			document.getElementById("eventDetails").textContent = de;
+		}
+
+		/* Remove event */
+		function removeEvent(id)
+		{
+			console.log("id");
+			console.log(id);
+			window.localStorage.removeItem(id);
+			document.getElementById(id).textContent = "";
+
+			var x = document.getElementById("detailsDiv"); // make details visible
+			x.style.display = "none";
+		}
+</script>
+</head>
+<body onload="getCurrentDateAndReloadData()">
+
+	<h2>Create new event:</h2>
+Event date:<input type="date" id="date" /><br>
+Event time: <input type="time" id="time" /><br>
+Event title:<input type="string" id="title" /><br>
+Event details: <input type="text" id="details" size="50" /><br>
+
+<input type="button" value="Submit" onclick="createNewEvent(document.getElementById('date').value,document.getElementById('time').value,document.getElementById('title').value,document.getElementById('details').value)" />
+
+
+	<h1 style="font-style: italic;font-size: 2em;">February 2018</h1>
+	<table>
+		<tr>
+			<th>Sunday</th>
+			<th>Monday</th>
+			<th>Tuesday</th>
+			<th>Wednesday</th>
+			<th>Thursday</th>
+			<th>Friday</th>
+			<th>Saturday</th>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td id="td1">1<p id="1" onclick="eventDetails('1')"></p></td>
+			<td id="td2">2<p id="2" onclick="eventDetails('2')"></p></td>
+			<td id="td3">3<p id="3" onclick="eventDetails('3')"></p></td>
+		</tr>
+		<tr>
+			<td id="td4">4<p id="4" onclick="eventDetails('4')"></p></td>
+			<td id="td5">5<p id="5" onclick="eventDetails('5')"></p></td>
+			<td id="td6">6<p id="6" onclick="eventDetails('6')"></p></td>
+			<td id="td7">7<p id="7" onclick="eventDetails('7')"></p></td>
+			<td id="td8">8<p id="8" onclick="eventDetails('8')"></p></td>
+			<td id="td9">9<p id="9" onclick="eventDetails('9')"></p></td>
+			<td id="td10">10<p id="10" onclick="eventDetails('10')"></p></td>
+		</tr>
+		<tr>
+			<td id="td11">11<p id="11" onclick="eventDetails('11')"></p></td>
+			<td id="td12">12<p id="12" onclick="eventDetails('12')"></p></td>
+			<td id="td13">13<p id="13" onclick="eventDetails('13')"></p></td>
+			<td id="td14">14<p id="14" onclick="eventDetails('14')"></p></td>
+			<td id="td15">15<p id="15" onclick="eventDetails('15')"></p></td>
+			<td id="td16">16<p id="16" onclick="eventDetails('16')"></p></td>
+			<td id="td17">17<p id="17" onclick="eventDetails('17')"></p></td>
+		</tr>
+		<tr>
+			<td id="td18">18<p id="18" onclick="eventDetails('18')"></p></td>
+			<td id="td19">19<p id="19" onclick="eventDetails('19')"></p></td>
+			<td id="td20">20<p id="20" onclick="eventDetails('20')"></p></td>
+			<td id="td21">21<p id="21" onclick="eventDetails('21')"></p></td>
+			<td id="td22">22<p id="22" onclick="eventDetails('22')"></p></td>
+			<td id="td23">23<p id="23" onclick="eventDetails('23')"></p></td>
+			<td id="td24">24<p id="24" onclick="eventDetails('24')"></p></td>
+		</tr>
+		<tr>
+			<td id="td25">25<p id="25" onclick="eventDetails('25')"></p></td>
+			<td id="td26">26<p id="26" onclick="eventDetails('26')"></p></td>
+			<td id="td27">27<p id="27" onclick="eventDetails('27')"></p></td>
+			<td id="td28">28<p id="28" onclick="eventDetails('28')"></p></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+	</table>
+
+	
+	<div id="detailsDiv" style="background-color:lightblue;width:700px;display:none;">
+		<h2>Event details:</h2>
+		<p id="eventTitle" style="color:red;font-size: 20px;font-style: bold;"></p>
+		<p id="eventDateTime" style="color:red;font-size: 20px;font-style: bold;"></p>
+		<p id="eventDetails" style="color:red;font-size: 20px;font-style: bold;"></p>
+		<p id="deleteId" style="display:none;"></p>
+		<input type="button" value="Delete Event" onclick="removeEvent(document.getElementById('deleteId').textContent)">
+	</div>
+
+
+
+</body>
+
+</html>
+
+
+
